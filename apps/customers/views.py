@@ -41,12 +41,33 @@ class CustomerAPIView(APIView):
         if customer_id:
             try:
                 customer = CustomerService.get_customer_by_id(customer_id)
-                return Response(CustomerSerializer(customer).data)
+                return Response(
+                    {
+                        "external_id": customer.external_id,
+                        "status": customer.status,
+                        "score": float(customer.score) if customer.score else None,
+                        "preapproved_at": (
+                            customer.pre_approved_at.isoformat()
+                            if customer.pre_approved_at
+                            else None
+                        ),
+                    }, status=status.HTTP_200_OK
+                )
             except Customers.DoesNotExist:
                 return Response(
                     {"error": "Customer not found"}, status=status.HTTP_404_NOT_FOUND
                 )
         else:
-            customers = CustomerService.get_all_active_customers()
-            serializer = CustomerSerializer(customers, many=True)
-            return Response(serializer.data)
+            customers = CustomerService.get_all_active_customers().all()
+            return Response(
+                [
+                    {
+                        "external_id": customer.external_id,
+                        "status": customer.status,
+                        "score": float(customer.score) if customer.score is not None else None,
+                        "preapproved_at": customer.pre_approved_at.isoformat() if customer.pre_approved_at else None
+                    }
+                    for customer in customers
+                ],
+                status=status.HTTP_200_OK
+            )
