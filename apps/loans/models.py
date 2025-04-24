@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils import timezone
-from customers.models import CustomersCustomer
+from apps.customers.models import Customers
 
 class Loans(models.Model):
     id = models.AutoField(primary_key=True)
@@ -12,7 +12,7 @@ class Loans(models.Model):
     contract_version = models.CharField(max_length=30, blank=True, null=True)
     maximum_payment_date = models.DateTimeField(blank=True, null=True)
     taken_at = models.DateTimeField(blank=True, null=True)
-    customer = models.ForeignKey(CustomersCustomer, on_delete=models.CASCADE, related_name='loans')
+    customer = models.ForeignKey(Customers, on_delete=models.CASCADE, related_name='loans')
     outstanding = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
 
     def __str__(self):

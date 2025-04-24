@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
-from loans.models import LoansLoan
-from customers.models import CustomersCustomer
+from apps.loans.models import Loans
+from apps.customers.models import Customers
 
 class Payments(models.Model):
     id = models.AutoField(primary_key=True)
@@ -11,7 +11,7 @@ class Payments(models.Model):
     total_amount = models.DecimalField(max_digits=20, decimal_places=10)
     status = models.SmallIntegerField()
     paid_at = models.DateTimeField(blank=True, null=True)
-    customer = models.ForeignKey(CustomersCustomer, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customers, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"Payment {self.id} - Amount: {self.total_amount} - Status: {self.status}"
@@ -24,7 +24,7 @@ class Paymentdetail(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
     amount = models.DecimalField(max_digits=20, decimal_places=10)
-    loan = models.ForeignKey(LoansLoan, on_delete=models.CASCADE)
+    loan = models.ForeignKey(Loans, on_delete=models.CASCADE)
     payment = models.ForeignKey(Payments, on_delete=models.CASCADE)
 
     def __str__(self):

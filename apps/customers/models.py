@@ -8,7 +8,7 @@ class Customers(models.Model):
     external_id = models.CharField(max_length=60, blank=True, null=True)
     status = models.SmallIntegerField()
     score = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
-    preapproved_at = models.DateTimeField(blank=True, null=True)
+    pre_approved_at = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
         return f"Customer {self.id} - Status: {self.status}"
